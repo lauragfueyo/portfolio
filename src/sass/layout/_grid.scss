@@ -1,0 +1,135 @@
+/* basado en grid bootstrap 4.0 */
+
+	// INDICE 
+	//1. Estilos objetos ocultos/visibles segun resolucion
+	//2. Contenedores
+	//		2.1 Contenedor ancho maximo
+	//		2.2 Contenedor liquido
+	//3. Grid - 12 columnas 
+	//		3.1 Columnas resoluciones hasta 755px con display:flex
+	//		3.2 Columnas con propiedad display:grid	
+
+
+/*1. Estilos objetos ocultos/visibles segun resolucion*/ 
+	/*	
+		visible-phone / hidden-phone: visible/oculto en mobiles
+		visible-tablet / hidden-tablet: visible/oculto en tablets
+		visible-device / hidden-device: visible/oculto en mobiles y tablets
+	*/
+	.visible-device, .visible-phone{
+		display: inherit !important;
+	}
+	.hidden-phone, 
+	.hidden-device, 
+	.visible-tablet, 
+	.visible-desktop{
+		display: none !important;
+	}
+	
+	@include respond-to(xs) {
+		.visible-tablet, 
+		.hidden-phone{
+			display: inherit !important;
+		}
+		.hidden-tablet, 
+		.visible-phone{
+			display: none !important;
+		}
+	}
+	
+	@include respond-to(m) {
+		.hidden-device{
+			display: inherit !important;
+		}
+		.visible-device, 
+		.visible-tablet, 
+		.visible-phone{
+			display: none !important;
+		}
+	}
+	
+/*2. Contenedores*/
+	
+	.container, 
+	.container2, 
+	.container-fluid{
+		margin: 0 auto;
+		padding: 0 $gutter-grid;
+	}
+	
+/*	//2.1 Contenedor ancho maximo
+	container: Contenedor con ancho maximo a partir de 1200px de resolucion
+		- Espacios laterales de 20px 
+		- Espacios laterales de 40px de 755px hasta 1200px de resolucion
+		- Ancho de 1140px sin espacios de 1200px a 1500px resolucion
+		- Ancho de 1370px sin espacios a partir de 1500px resolucion 
+*/
+	.container{
+		@include respond-to(xs) {
+			padding: 0 $gutter-grid*2;
+		}
+		@include respond-to(l) {
+			max-width: 1036px;
+			padding: 0;
+		}
+	}
+	
+/*	//2.2 Contenedor liquido
+	container-fluid: Contenedor liquido con espacio laterales
+		- Espacios laterales de 20px 
+		- Espacios laterales de 30px de 755px a 1080px de resolucion
+		- Espacios laterales de 50px de 1080px a 1500px de resolucion
+		- Espacios laterales de 70px a partir de 1500px de resolucion
+*/
+	.container-fluid{
+		@include respond-to(xs) {
+			padding: 0 $gutter-grid*1.5;
+		}
+		@include respond-to(m) {
+			padding: 0 $gutter-grid*2.5;
+		}
+		@include respond-to(xxl) {
+			padding: 0 $gutter-grid*3.5;
+		}	
+	}
+
+/*3. Grid - 12 columnas*/
+	.fila, .fila2{
+		display: flex;
+		flex-wrap: wrap;
+		margin-right: -($gutter-grid-col);
+		margin-left: -($gutter-grid-col);
+		width: calc(100% - -20px);
+	}
+
+	.fila2{
+		margin: 0;
+		width: 100%;
+	}
+		
+	[class*="col-"]{
+		margin-bottom: $gutter*2;
+		
+		@include respond-to(m) {
+			margin-bottom: 0;
+		}
+	}
+	[class*="col-"] [class*="col-"]{
+		margin-bottom: 0;
+	}
+	
+	/*3.1 Columnas resoluciones hasta 755px con display:flex*/
+	.fila, 
+	.fila2{
+		@include make-grid-columns;
+		
+		&.align-center{
+			align-items: center;
+		}
+		&.stretch-col{
+			justify-content: stretch;
+		}
+		&.right-col{
+			justify-content: flex-end;
+		}
+	}

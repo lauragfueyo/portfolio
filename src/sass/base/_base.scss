@@ -1,0 +1,41 @@
+* {
+    border: 0;
+    list-style-type: none;
+    margin: 0;
+    outline: none !important;
+    padding: 0;
+}
+
+html {
+    font-size: 100%;
+}
+
+body{
+    @include font($color: $base-color, $family: $theme-family);
+}
+
+p{
+    line-height: 1.8em;
+    margin-bottom: $gutter*3;
+}
+
+img{
+    max-width: 100%;
+}
+
+a{
+    color: $theme-color;
+    transition: all 300ms linear;
+
+    @media (hover: hover){
+        &:hover{
+            text-decoration: none;
+        }
+    }
+
+}
+
+h1, h2, h3, h4, h5, h6{
+    @include font($color: $base-color, $size: base, $line: normal, $weight: normal);
+    margin: 0;
+}

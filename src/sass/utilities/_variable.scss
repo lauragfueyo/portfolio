@@ -1,0 +1,98 @@
+@charset "UTF-8";
+	
+	// INDICE 
+	// Breakpoints media query
+	// 		Min-width
+	// 		Max-width
+	// 		Min-height
+	// 		Max-height
+	// Fuentes
+	// Colores
+	//		Colores base
+	//	Colores tema 
+	// Espacios
+	
+// BREAKPOINTS MEDIA QUERY
+	
+	// MIN-WIDTH
+	$breakpoints: (
+		x3s: 0,
+		xxs: 23em,    //375px 
+		xs:  47em,    //755px 
+		s:   59em,    //950px 
+		m:   67.5em,  //1080px 
+		l:   75em,    //1200px 
+		xl:  81em,  //1320px 
+		xxl: 93.5em,  //1500px 
+	) !default;
+	
+	// MAX-WIDTH
+	$breakpoints-max-width: (
+		max-xxs: 31em,   //500px
+		max-xs:  47em,   //755px
+		max-s:   59em,   //950px
+		max-m:   67.5em, //1080px
+		max-l:   75em,   //1200px
+		max-xl:  81em, //1320px
+		max-xxl: 93.5em, //1500px
+	) !default;
+	
+	// MIN-HEIGHT
+	$breakpoints-height: (
+		height-s: 40.5em, //650px
+		height-m: 56.5em, //910px
+	) !default;
+	
+	// MAX-HEIGHT
+	$breakpoints-max-height: (
+		max-height-s: 40.5em, //650px
+		max-height-m: 56.5em, //910px
+	) !default;
+	
+// FUENTES
+	$theme-family: 'Open Sans', sans-serif;
+
+	$font-size: (
+		base: 1rem,    //16px
+	   xxs:    .75rem,  //13px
+		xs:    .8rem,  //13px
+		 s:    .9rem,  //14px
+		 m:    1.3rem, //21px
+		 l:    2rem,   //32px
+		xl:    2.3rem,   //32px
+	);
+
+	$font-size-desktop: (
+		xl:    3rem,   //32px
+	);
+
+	$font-weight: (
+		light:   300,
+		normal:  400,
+		medium:  600,
+		bold:    700,
+		black:   800,
+	);
+		
+// COLORES
+	
+	// COLORES BASE
+		$black: #000;
+		$white: #fff;
+		$gray: #bfbfbf;
+		$soft-gray: #f6f6f6;
+		
+
+	// COLORES TEMA
+		$base-color: #222 !default;
+		$theme-color: #197EAE !default;
+		$corporative: #009AD8 !default;
+		$soft-blue: #def0f9;
+		$red: #cf3b3b;
+		$blue: #66b2d6;
+
+// COLS Y ESPACIOS GRID Y ESPACIO GENERICO
+	$grid-columns: 12 !default;
+	$gutter-grid: 20px !default;
+	$gutter-grid-col: 10px !default;
+	$gutter: 10px !default;

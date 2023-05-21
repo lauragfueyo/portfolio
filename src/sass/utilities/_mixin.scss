@@ -1,0 +1,212 @@
+@charset "UTF-8";
+	
+	// INDICE 
+	//	Breakpoints media query
+	//		Media min-width
+	//		Media max-width
+	//		Media min-height
+	//		Media max-height
+	//	Funciones breakpoint para grid
+	//		Breakpoint ancho minimo. Null para el mas pequeño.
+	//		Recupera el nombre del breakpoing, en el mas pequeño queda vacio.
+	//		Incluye el media query para los diferentes breakpoints. No se incluye en el mas pequeño.
+	//	Font face
+	//	Mixin parar crear columnas del grid flex
+	//  Fuentes
+
+// BREAKPOINTS MEDIA QUERY
+	@mixin respond-to($breakpoint) {
+		
+		// MEDIA MIN-WIDTH
+		@if map-has-key($breakpoints, $breakpoint) {
+			@media (min-width: map-get($breakpoints, $breakpoint)) {
+				@content;
+			}
+		}
+		// MEDIA MAX-WIDTH
+		@if map-has-key($breakpoints-max-width, $breakpoint) {
+			@media (max-width: map-get($breakpoints-max-width, $breakpoint)) {
+				@content;
+			}
+		}
+		// MEDIA MIN-HEIGHT
+		@if map-has-key($breakpoints-height, $breakpoint) {
+			@media (min-height: map-get($breakpoints-height, $breakpoint)) {
+				@content;
+			}
+		}
+		// MEDIA MAX-HEIGHT
+		@if map-has-key($breakpoints-max-height, $breakpoint) {
+			@media (max-height: map-get($breakpoints-max-height, $breakpoint)) {
+				@content;
+			}
+		}
+	}
+
+// FUNCIONES BREAKPOINT PARA GRID
+
+	// BREAKPOINT ANCHO MINIMO. NULL PARA EL MAS PEQUEÑO.
+	@function breakpoint-min($name, $breakpoints: $breakpoints) {
+	  $min: map-get($breakpoints, $name);
+	  @return if($min != 0, $min, null);
+	}
+	
+	// RECUPERA EL NOMBRE DEL BREAKPOINT, EN EL MAS PEQUEÑO QUEDA VACIO.
+	@function breakpoint-size($name, $breakpoints: $breakpoints) {
+		@return if(breakpoint-min($name, $breakpoints) == null, "", "-#{$name}");
+	}
+		
+	// INCLUYE EL MEDIA QUERY PARA LOS DIFERENTES BREAKPOINTS. NO SE INCLUYE EL MAS PEQUEÑO.
+	@mixin media-breakpoint-up($name, $breakpoints: $breakpoints) {
+		$min: breakpoint-min($name, $breakpoints);
+		@if $min {
+			@media (min-width: $min) {
+				@content;
+			}
+		} @else {
+			@content;
+		}
+	}
+	
+// DISPLAY FLEX
+	@mixin flex-container($flex: flex, $wrap: null, $direction: null, $justify: null, $align: null, $items: null){
+		display: $flex;
+		flex-direction: $direction;
+		flex-wrap: $wrap;
+		justify-content: $justify;
+		align-content: $align;
+		align-items: $items;
+	}
+
+// FONT FACE
+	@mixin font-face($name, $file, $weight: normal, $style: normal){
+		@font-face {
+			font-family: "#{$name}";
+				src: url('/fuente/#{$file}.woff2') format('woff2'),
+					 url('/fuente/#{$file}.woff') format('woff');
+			font-weight: $weight;
+			font-style: $style;
+		}
+	}
+
+// MIXIN PARA CREAR COLUMNAS DEL GRID FLEX
+	@mixin make-col($size, $columns: $grid-columns) {
+		-webkit-box-flex: 0 0 percentage($size / $columns);
+		-ms-flex: 0 0 percentage($size / $columns);
+		flex: 0 0 percentage($size / $columns);
+		max-width: percentage($size / $columns);
+		box-sizing: border-box;
+	}
+	
+	@mixin make-gutter-col($size, $columns: $grid-columns) {
+	  $num: $size / $columns;
+	  margin-left: if($num == 0, 0, percentage($num));
+	}
+
+	@mixin make-grid-columns($columns: $grid-columns, $gutter: $gutter-grid-col, $breakpoints: $breakpoints) {
+		// Estilos comunes para todas las columnas
+		%grid-column{
+			position: relative;
+			width: 100%;
+			min-height: 1px;
+			padding-right: $gutter;
+			padding-left: $gutter;
+		}
+
+		@each $breakpoint in map-keys($breakpoints) {
+			$breakpointSize: breakpoint-size($breakpoint, $breakpoints);
+		
+			@for $i from 1 through $columns {
+				.col#{$breakpointSize}-#{$i} {
+					@extend %grid-column;
+				}
+			}
+			.col#{$breakpointSize},	.col#{$breakpointSize}-auto {
+				@extend %grid-column;
+			}
+
+			@include media-breakpoint-up($breakpoint, $breakpoints) {
+				.col#{$breakpointSize} {
+					flex-basis: 0;
+					flex-grow: 1;
+					max-width: 100%;
+				}
+				
+				.col#{$breakpointSize}-auto {
+					flex: 0 0 auto;
+					width: auto;
+					max-width: none; // Reset earlier grid tiers
+				}
+
+				@for $i from 1 through $columns {
+					.col#{$breakpointSize}-#{$i} {
+						@include make-col($i, $columns);
+					}
+				}
+				.order#{$breakpointSize}-first{
+					order: -1;
+				}
+				.order#{$breakpointSize}-last{
+					order: $columns + 1;
+				}
+
+				@for $i from 0 through $columns {
+					.order#{$breakpointSize}-#{$i}{
+						order: $i;
+					}
+				}
+
+				@for $i from 0 through ($columns - 1) {
+					@if not ($breakpointSize == "" and $i == 0){
+						.offset#{$breakpointSize}-#{$i}{
+							@include make-gutter-col($i, $columns);
+						}
+					}
+				}
+			}
+		}
+	}
+
+//7. FONTS SIZES
+	@function font-size($font){
+		$size: map-get($font-size, $font);
+		@return $size;
+	}
+	@function font-size-desktop($font){
+		$size: map-get($font-size, $font);
+		@return $size;
+	}
+	@function font-weight($weight){
+		$weight: map-get($font-weight, $weight);
+		@return $weight;
+	};
+
+	@mixin font($family: null, $size: null, $weight: null, $style: null, $line: null, $color: null){
+		$rems: font-size($size);
+		$grosor: font-weight($weight);
+
+		color: $color;
+		font-family: $family;
+		font-weight: $grosor;
+		font-style: $style;
+		font-size: $rems;
+		line-height: $line;
+		
+		/*@include respond-to(m) {
+			$rems: font-size-laptop($size);
+			font-size: $rems;
+		}*/
+		@include respond-to(xxl) {
+			$rems: font-size-desktop($size);
+			font-size: $rems;
+		}
+	}
+
+//10. POSICION
+	@mixin position($position, $top: null, $right: null, $bottom: null, $left: null){
+		position: $position;
+		top: $top;
+		bottom: $bottom;
+		left: $left;
+		right: $right;
+	}
